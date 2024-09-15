@@ -1,4 +1,4 @@
-from validaciones import validadr_id_unico,validar_promedio
+from validaciones import validadr_id_unico,validar_promedio, validar_correo, validar_telefono, validar_codigo_postal, validar_fecha
 
 def crear(matriz):
     '''
@@ -21,6 +21,47 @@ def crear(matriz):
     print("Ingrese el apellido del estudiante:")
     apellido = input()
 
+    #correo
+    correo_valido = 0
+    while correo_valido == 0:
+        print("Ingrese el correo electrónico del estudiante:")
+        correo = input()
+        if validar_correo(correo):
+            correo_valido = 1
+        else:
+            print("El correo electrónico ingresado no es válido.")
+
+    #telefono
+    telefono_valido = 0
+    while telefono_valido == 0:
+        print("Ingrese el número de telefono del estudiante:")
+        telefono = input().strip()
+        if validar_telefono(telefono):
+            telefono_valido = 1
+        else:
+            print("El telefono ingresado no es válido.")
+    
+    #Código_postal
+    codigop_valido = 0
+    while codigop_valido == 0:
+        print("Ingrese el código postal del estudiante:")
+        codigo = input().strip()
+        if validar_codigo_postal(codigo):
+            codigop_valido = 1
+        else:
+            print("El código postal ingresado no es válido. Por favor ingrese nuevamente con el formato (A1245AAA)")
+
+    #Fecha
+    fecha_valida = 0
+    while fecha_valida == 0:
+        print("Ingrese la fecha ")
+        fecha = input().strip()
+        if validar_fecha(fecha):
+            fecha_valida = 1
+        else:
+            print("La fecha ingresada no es válida. Por favor ingrese nuevamente con el formato(DD-MM-YYYY)")
+
+    #Promedio
     promedio_valido = 0
     while promedio_valido == 0:
         print("Ingrese el promedio del estudiante: ")
@@ -34,7 +75,7 @@ def crear(matriz):
     apellido_capitalizado = apellido.capitalize()
 
     # Crear una nueva entrada
-    new_student = [id, nombre_capitalizado, apellido_capitalizado, promedio]
+    new_student = [id, nombre_capitalizado, apellido_capitalizado,correo,telefono, codigo,fecha, promedio]
     print("Estudiante agregado con éxito.")
     matriz.append(new_student)
 
@@ -45,18 +86,18 @@ def mostrar_matriz(matriz):
     '''
     Muestra la matríz de estudiantes en formato tabular, ordenada por promedio y ID.
     '''
-    estudiantes = [[id,nombre[:10],apellido[:12],promedio] for id,nombre,apellido,promedio in matriz]
+    estudiantes = [[id,nombre[:10],apellido[:12],correo[:30],telefono[:18],codigo_postal[:18],fecha[:14],promedio] for id,nombre,apellido,correo,telefono,codigo_postal,fecha,promedio in matriz]
 
     #Ordena la lista de estudiantes por promedio descendente y luego por ID de forma ascendente
-    estudiante_ordenados = sorted(estudiantes, key=lambda x: (-x[3],x[0]))
+    estudiante_ordenados = sorted(estudiantes, key=lambda x: (-x[7],x[0]))
     
     #se imprimira los encabezados
-    print(f"{'ID':<5}{'Nombre':<10}{'Apellido':<10}{'Promedio':>10}")
-    print("-"*36) #Línea de separación de los encabezados 
+    print(f"| {'ID':<5} | {'Nombre':<10} | {'Apellido':<12} | {'Correo':<20} | {'telefono':<14} | {'Codigo_postal':<18} | {'fecha':<14} | {'Promedio':>10} |")
+    print("-"*120) #Línea de separación de los encabezados 
 
     #Impresión de filas de datos
     for estudiante in estudiante_ordenados:
-        print(f"{estudiante[0]:<5}{estudiante[1]:<10}{estudiante[2]:<10}{estudiante[3]:>10.2f}")
+        print(f"| {estudiante[0]:<5} | {estudiante[1]:<10} | {estudiante[2]:<10} | {estudiante[3]:<20} | {estudiante[4]:<14} | {estudiante[5]:<18} | {estudiante[6]:<18} | {estudiante[7]:>10.2f} |")
 
 
 def actualizar(matriz):
@@ -71,11 +112,59 @@ def actualizar(matriz):
     #Busca el estudiante por su ID
     for i in range(len(matriz)):
         if matriz[i][0]==id :
-            print("Estudiante encontrado")       
+            print("Estudiante encontrado")
+
+            #Nombre       
             print("Ingrese el nuevo nombre del estudiante:")
             nombre = input()
+
+            #Apellido
             print("Ingrese el nuevo apellido del estudiante:")
             apellido = input()
+
+            #Solicita y valida el nuevo correo
+            correo_valido = 0
+            while correo_valido == 0:
+                print("Ingrese el nuevo correo electrónico del estudiante:")
+                correo = input()
+                if validar_correo(correo):
+                    correo_valido = 1
+                else:
+                    print("El correo electrónico ingresado no es válido.")
+
+            #Solicita y valida el nuevo teléfono
+            telefo_valido = 0
+            while telefo_valido == 0:
+                print("Ingrese el nuevo número de telefono del estudiante:")
+                telefono = input().strip()
+                if validar_telefono(telefono):
+                    telefo_valido = 1
+                else:
+                    print("El número de teléfono ingresado no es válido.")
+
+            #Solicita y valida el nuevo código postal
+            codigop_valido = 0
+            while codigop_valido == 0:
+                print("Ingrese el nuevo código postal del estudiante:")
+                codigo_postal = input().strip()
+                if validar_codigo_postal(codigo_postal):
+                    codigop_valido = 1
+                else:
+                    print("El código postal ingresado no es válido. Por favor ingrese nuevamente con el formato(A1234AAA)")
+
+            #Solicita y valida la nueva fecha
+            fecha_valida = 0
+            while fecha_valida == 0:
+                print("Ingrese la nueva fecha (DD-MM-YYYY):")
+                fecha = input().strip()
+                if validar_fecha(fecha):
+                    fecha_valida = 1
+                else:
+                    print("La fecha ingresada no es válida. Por favor ingrese nuevamente con el formato (DD-MM-YYYY)")
+
+
+
+            #Promedio
             flag=0
             while flag==0: #Verificamos que el promedio este entre 1 y 10
                 flag=1
@@ -89,7 +178,7 @@ def actualizar(matriz):
             apellido_capitalizado = apellido.capitalize()
 
             #Actualización de los datos
-            matriz[i]=[id,nombre_capitalizado,apellido_capitalizado,promedio]
+            matriz[i]=[id,nombre_capitalizado,apellido_capitalizado,correo,telefono,codigo_postal,fecha,promedio]
             print("Los datos fueron actualizados")
             return matriz
     print("Estudiante no encontrado.")
@@ -102,15 +191,23 @@ def eliminar(matriz):
     Solicita al usuario el ID del estudiante, busca al estudiante por su ID,
     y lo elimina si el estudiante existe. 
     '''
-    print("Ingrese el ID del estudiante que desea eliminar:")
-    id = int(input())
+    flag = 0 #Se asume que el estudiante no ha sido encontrado
+    while flag == 0:
+        print("Ingrese el ID del estudiante que desea eliminar:")
+        id = int(input())
 
-    #Busca el estudiante por ID
-    for i in range(len(matriz)):
-        if matriz[i][0] == id:
-            matriz.pop(i) #La función pop eliminar los datos de la matriz que se encuentra en el ID ingresado
-            print("Estudiante eliminado con éxito")
-            return matriz
+        #usa el bucle while para buscar el estudiante
+        i=0
+        while i < len(matriz):
+            if matriz[i][0] == id:
+                matriz.pop(i) #La función pop eliminar los datos de la matriz que se encuentra en el ID ingresado
+                print("Estudiante eliminado con éxito")
+                flag = 1 #Establece el flag a 1 indicando con el estudiante ha sido encontrado y eliminado
+            else:
+                i+=1 #Continua iterando si el estudiante no es encontrado
         
-    print("Estudiante no fue encontrado")
+        #Si el estudiante no es encontrado
+        if flag == 0:
+            print("Estudiante no fue encontrado. Intente nuevamente.") 
+    
     return matriz
